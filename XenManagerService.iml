@@ -12,6 +12,9 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="JSTAF" level="project" />
+    <orderEntry type="library" name="xenserver-7.0.0" level="project" />
     <orderEntry type="library" name="ws-commons-util-1.0.2" level="project" />
+    <orderEntry type="library" name="xmlrpc-client-3.1" level="project" />
+    <orderEntry type="library" name="xmlrpc-common-3.1" level="project" />
   </component>
 </module>
