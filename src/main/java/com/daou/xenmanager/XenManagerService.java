@@ -3,15 +3,11 @@ package com.daou.xenmanager;
 import com.daou.xenmanager.core.XenCore;
 import com.daou.xenmanager.entity.ServerInfo;
 import com.daou.xenmanager.exception.STAFXenApiException;
-import com.ibm.staf.STAFException;
-import com.ibm.staf.STAFHandle;
-import com.ibm.staf.STAFResult;
-import com.ibm.staf.STAFUtil;
+import com.ibm.staf.*;
 import com.ibm.staf.service.STAFCommandParseResult;
 import com.ibm.staf.service.STAFCommandParser;
 import com.ibm.staf.service.STAFServiceInterfaceLevel30;
 import com.xensource.xenapi.VM;
-import com.xensource.xenapi.VMAppliance;
 
 import java.util.*;
 
@@ -54,10 +50,17 @@ public class XenManagerService implements STAFServiceInterfaceLevel30{
         // ADD parser
         fAddParser = new STAFCommandParser();
         fAddParser.addOption("ADD", 1, STAFCommandParser.VALUENOTALLOWED);
-        fAddParser.addOption("VM", 1, STAFCommandParser.VALUEREQUIRED);
-        fAddParser.addOption("SNAP-SHOT", 1, STAFCommandParser.VALUEREQUIRED);
-        fAddParser.addOptionNeed("ADD", "VM");
-        fAddParser.addOptionNeed("ADD", "SNAP-SHOT");
+        fAddParser.addOption("VM-NAME", 1, STAFCommandParser.VALUEREQUIRED);
+        fAddParser.addOption("SNAP-NAME", 1, STAFCommandParser.VALUEREQUIRED);
+        fAddParser.addOption("SNAP-UUID", 1, STAFCommandParser.VALUEREQUIRED);
+        fAddParser.addOptionNeed("ADD", "VM-NAME");
+        fAddParser.addOptionNeed("ADD", "SNAP-NAME");
+        fAddParser.addOptionNeed("ADD", "SNAP-UUID");
+        // DELETE parser
+        fDeleteParser = new STAFCommandParser();
+        fDeleteParser.addOption("DELETE", 1, STAFCommandParser.VALUENOTALLOWED);
+        fDeleteParser.addOption("VM-NAME", 1, STAFCommandParser.VALUEREQUIRED);
+        fDeleteParser.addOption("VM-UUID", 1, STAFCommandParser.VALUEREQUIRED);
         // Register Help Data
         registerHelpData(kDeviceInvalidSerialNumber,"Invalid serial number","A non-numeric value was specified for serial number");
 
@@ -74,6 +77,8 @@ public class XenManagerService implements STAFServiceInterfaceLevel30{
             result = handleList(info);
         }else if(request.equals("add")){
             result = handleAdd(info);
+        }else if(request.equals("delete")){
+            result = handleDelete(info);
         }else{
             result = new STAFResult(STAFResult.InvalidRequestString,"Unknown XenManagerService Request: " + lowerRequest);
         }
@@ -90,7 +95,7 @@ public class XenManagerService implements STAFServiceInterfaceLevel30{
         XenCore xenManager = new XenCore();
         List<VM.Record> list;
         //About STAF
-        STAFResult resolveResult;
+        STAFResult resolveResult, result;
         STAFCommandParseResult parsedRequest = fListParser.parse(info.request);
         String resultString = "";
         String listValue = "";
@@ -106,28 +111,41 @@ public class XenManagerService implements STAFServiceInterfaceLevel30{
         }
 
         listValue = resolveResult.result;
+
         try{
+            Map<String, String> xenResultMap;
+
             xenManager.connect(new ServerInfo(xenHost, xenUser, xenPassword));
 
             if("vm".equals(listValue)){
                 //request vm
-                list = xenManager.getVMListByType(XenCore.GET_TYPE_VM);
+                xenResultMap = xenManager.getVMListByType(XenCore.GET_TYPE_VM);
             }else if("snap-shot".equals(listValue)){
                 //request snap-shot
-                list = xenManager.getVMListByType(XenCore.GET_TYPE_SNAP);
+                xenResultMap = xenManager.getVMListByType(XenCore.GET_TYPE_SNAP);
             }else{
                 //Invalid request value
                 xenManager.disconnect();
                 return new STAFResult(STAFResult.InvalidRequestString, "LIST value is required VM | SNAP-SHOT");
             }
-
-            //result list (vm or snap-shot)
-            for (VM.Record vm : list){
-                resultString = resultString + vm.nameLabel + '\n';
+            //set result map definition
+            STAFMarshallingContext mc = new STAFMarshallingContext();
+            STAFMapClassDefinition mapClass = new STAFMapClassDefinition("XEN_MANAGER/LIST/MAP");
+            for (String uuid : xenResultMap.keySet()){
+                mapClass.addKey(uuid, uuid);
             }
+            mc.setMapClassDefinition(mapClass);
+            //create result map
+            Map resultMap = mapClass.createInstance();
+            for(Object uuid : xenResultMap.keySet()){
+                resultMap.put(uuid, xenResultMap.get(uuid));
+            }
+            mc.setRootObject(resultMap);
+            resultString = mc.marshall();
         }catch (STAFXenApiException e){
             return new STAFResult(STAFResult.UserDefined, e.toString());
         }
+
         return new STAFResult(STAFResult.Ok, resultString);
     }
 
@@ -138,7 +156,7 @@ public class XenManagerService implements STAFServiceInterfaceLevel30{
         }
 
         STAFResult resolveResult;
-        String resultString, vmValue, snapValue;
+        String resultString, vmName, snapName, snapUuid;
         STAFCommandParseResult parsedRequest = fAddParser.parse(info.request);
 
         if (parsedRequest.rc != STAFResult.Ok){
@@ -146,28 +164,36 @@ public class XenManagerService implements STAFServiceInterfaceLevel30{
                     parsedRequest.errorBuffer);
         }
 
-        //check validation vm
-        resolveResult = resolveVar(info.machine, parsedRequest.optionValue("vm"), info.handle);
+        //check validation vm-name
+        resolveResult = resolveVar(info.machine, parsedRequest.optionValue("vm-name"), info.handle);
         if (resolveResult.rc != STAFResult.Ok){
             return resolveResult;
         }
-        vmValue = resolveResult.result;
-
-        //check validation snap-shot
-        resolveResult = resolveVar(info.machine, parsedRequest.optionValue("snap-shot"), info.handle);
+        vmName = resolveResult.result;
+        //check validation snap-name
+        resolveResult = resolveVar(info.machine, parsedRequest.optionValue("snap-name"), info.handle);
         if (resolveResult.rc != STAFResult.Ok){
             return resolveResult;
         }
-        snapValue = resolveResult.result;
-
+        snapName = resolveResult.result;
+        //check validation snap-uuid
+        resolveResult = resolveVar(info.machine, parsedRequest.optionValue("snap-uuid"), info.handle);
+        if (resolveResult.rc != STAFResult.Ok){
+            return resolveResult;
+        }
+        snapUuid = resolveResult.result;
         //xen logic
         XenCore xenManager = new XenCore();
         try{
             xenManager.connect(new ServerInfo(xenHost, xenUser, xenPassword));
-            VM.Record record = xenManager.createVMBySnapshotName(snapValue, vmValue);
+            //find snap-shot logic
+            VM.Record record = xenManager.createVMBySnapshot(snapName, snapUuid, vmName);
+            //if snap-shot is not exist
             if(record == null){
-                return new STAFResult(STAFResult.InvalidRequestString, "CHECK YOUR SNAP-SHOT NAME");
-            }else{
+                return new STAFResult(STAFResult.InvalidRequestString, "CHECK YOUR SNAP-SHOT NAME OR UUID");
+            }
+            //create vm success
+            else{
                 resultString = "SUCCESS ADD VM named of " + record.nameLabel + "";
             }
         }catch (STAFXenApiException e){
@@ -176,14 +202,52 @@ public class XenManagerService implements STAFServiceInterfaceLevel30{
         return new STAFResult(STAFResult.Ok, resultString);
     }
 
+    private STAFResult handleDelete(RequestInfo info){
+        // Check whether Trust level is sufficient for this command.
+        if (info.trustLevel < 4){
+            return new STAFResult(STAFResult.AccessDenied,
+                    "Trust level 4 required for DELETE request. Requesting " +
+                            "machine's trust level: " +  info.trustLevel);
+        }
 
+        String resultString = "";
+        String vmName, vmUuid;
+        STAFResult resolveResult;
+        STAFCommandParseResult parsedRequest = fDeleteParser.parse(info.request);
 
+        if (parsedRequest.rc != STAFResult.Ok){
+            return new STAFResult(STAFResult.InvalidRequestString, parsedRequest.errorBuffer);
+        }
+        //check validation vm-name
+        resolveResult = resolveVar(info.machine, parsedRequest.optionValue("vm-name"), info.handle);
+        if (resolveResult.rc != STAFResult.Ok){
+            return resolveResult;
+        }
+        vmName = resolveResult.result;
+        //check validation vm-uuid
+        resolveResult = resolveVar(info.machine, parsedRequest.optionValue("vm-uuid"), info.handle);
+        if (resolveResult.rc != STAFResult.Ok){
+            return resolveResult;
+        }
+        vmUuid = resolveResult.result;
 
-//*********TODO:should develop******************
+        XenCore xenManager = new XenCore();
+        try{
+            xenManager.connect(new ServerInfo(xenHost, xenUser, xenPassword));
+            String name = xenManager.removeVMByName(vmName, vmUuid);
+            if(name == null){
+                return new STAFResult(STAFResult.InvalidRequestString, "CHECK YOUR VM NAME OR UUID");
+            }else{
+                resultString = "SUCCESS DELETE VM named of " + name + "";
+            }
+        }catch (STAFXenApiException e){
+            return new STAFResult(STAFResult.UserDefined, e.toString());
+        }
 
+        return new STAFResult(STAFResult.Ok, resultString);
+    }
 
-
-
+//************************** SHOULD DEVELOP *******************************//
 
     private STAFResult handleHelp()
     {
@@ -202,8 +266,6 @@ public class XenManagerService implements STAFServiceInterfaceLevel30{
     {
         return new STAFResult(STAFResult.Ok, kVersion);
     }
-
-
 
     private STAFResult handleQuery(RequestInfo info)
     {
@@ -279,83 +341,6 @@ public class XenManagerService implements STAFServiceInterfaceLevel30{
             else
             {
                 return new STAFResult(STAFResult.DoesNotExist, printerValue);
-            }
-        }
-
-        return new STAFResult(STAFResult.Ok, resultString);
-    }
-
-    private STAFResult handleDelete(RequestInfo info)
-    {
-        // Check whether Trust level is sufficient for this command.
-        if (info.trustLevel < 4)
-        {
-            return new STAFResult(STAFResult.AccessDenied,
-                    "Trust level 4 required for DELETE request. Requesting " +
-                            "machine's trust level: " +  info.trustLevel);
-        }
-
-        STAFResult result = new STAFResult(STAFResult.Ok, "");
-        String resultString = "";
-        STAFResult resolveResult = new STAFResult();
-        STAFCommandParseResult parsedRequest = fDeleteParser.parse(info.request);
-        String printerValue;
-        String modemValue;
-
-        if (parsedRequest.rc != STAFResult.Ok)
-        {
-            return new STAFResult(STAFResult.InvalidRequestString,
-                    parsedRequest.errorBuffer);
-        }
-
-        resolveResult = resolveVar(info.machine,
-                parsedRequest.optionValue("printer"),
-                info.handle);
-
-        if (resolveResult.rc != STAFResult.Ok)
-        {
-            return resolveResult;
-        }
-
-        printerValue = resolveResult.result;
-
-        resolveResult = resolveVar(info.machine,
-                parsedRequest.optionValue("modem"),
-                info.handle);
-
-        if (resolveResult.rc != STAFResult.Ok)
-        {
-            return resolveResult;
-        }
-
-        modemValue = resolveResult.result;
-
-        if (!printerValue.equals(""))
-        {
-            synchronized (fPrinterMap)
-            {
-                if (fPrinterMap.containsKey(printerValue))
-                {
-                    fPrinterMap.remove(printerValue);
-                }
-                else
-                {
-                    return new STAFResult(STAFResult.DoesNotExist, printerValue);
-                }
-            }
-        }
-        else if (!modemValue.equals(""))
-        {
-            synchronized (fModemMap)
-            {
-                if (fModemMap.containsKey(modemValue))
-                {
-                    fModemMap.remove(modemValue);
-                }
-                else
-                {
-                    return new STAFResult(STAFResult.DoesNotExist, modemValue);
-                }
             }
         }
 

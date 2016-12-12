@@ -2,4 +2,4 @@ Manifest-Version: 1.0
 
 Name: staf/service/info
 Service-Class: com.daou.xenmanager.XenManagerService
-Packaged-Jars: xenserver-7.0.0 ws-commons-util-1.0.2 xmlrpc-client-3.1 xmlrpc-common-3.1
+Packaged-Jars: xenserver-7.0.0 ws-commons-util-1.0.2 xmlrpc-client-3.1 xmlrpc-common-3.1 org.json:json:20160810
