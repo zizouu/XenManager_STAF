@@ -9,14 +9,6 @@
     <packaging>jar</packaging>
     <version>0.0.1</version>
 
-    <repositories>
-        <repository>
-            <id>ext_lib</id>
-            <name>ext_lib</name>
-            <url>file://${project.basedir}/ext_jar</url>
-        </repository>
-    </repositories>
-
     <properties>
         <java-version>1.8</java-version>
     </properties>
