@@ -13,22 +13,7 @@
         <java-version>1.8</java-version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>xen-manager-lib</id>
-            <name>xen-manger-lib</name>
-            <url>file://${project.basedir}/lib</url>
-        </repository>
-    </repositories>
-
     <dependencies>
-        <dependency>
-            <groupId>com.daou</groupId>
-            <artifactId>lib</artifactId>
-        </dependency>
-    </dependencies>
-
-    <!--<dependencies>
         <dependency>
             <groupId>com.daou.lib</groupId>
             <artifactId>ws-commons-util</artifactId>
@@ -54,7 +39,7 @@
             <artifactId>staf</artifactId>
             <version>1.0.0</version>
         </dependency>
-    </dependencies>-->
+    </dependencies>
 
     <build>
         <plugins>
