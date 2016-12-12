@@ -11,11 +11,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="JSTAF" level="project" />
-    <orderEntry type="library" name="xenserver-7.0.0" level="project" />
-    <orderEntry type="library" name="ws-commons-util-1.0.2" level="project" />
-    <orderEntry type="library" name="xmlrpc-client-3.1" level="project" />
-    <orderEntry type="library" name="xmlrpc-common-3.1" level="project" />
-    <orderEntry type="library" name="org.json:json:20160810" level="project" />
+    <orderEntry type="library" name="Maven: com.daou.lib:ws-commons-util:1.0.0" level="project" />
+    <orderEntry type="library" name="Maven: com.daou.lib:xenserver:1.0.0" level="project" />
+    <orderEntry type="library" name="Maven: com.daou.lib:xmlrpc-client:1.0.0" level="project" />
+    <orderEntry type="library" name="Maven: com.daou.lib:xmlrpc-common:1.0.0" level="project" />
+    <orderEntry type="library" name="Maven: com.daou.lib:staf:1.0.0" level="project" />
   </component>
 </module>

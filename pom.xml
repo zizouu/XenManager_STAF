@@ -9,9 +9,45 @@
     <packaging>jar</packaging>
     <version>0.0.1</version>
 
+    <repositories>
+        <repository>
+            <id>ext_lib</id>
+            <name>ext_lib</name>
+            <url>file://${project.basedir}/ext_jar</url>
+        </repository>
+    </repositories>
+
     <properties>
         <java-version>1.8</java-version>
     </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.daou.lib</groupId>
+            <artifactId>ws-commons-util</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.daou.lib</groupId>
+            <artifactId>xenserver</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.daou.lib</groupId>
+            <artifactId>xmlrpc-client</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.daou.lib</groupId>
+            <artifactId>xmlrpc-common</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.daou.lib</groupId>
+            <artifactId>staf</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+    </dependencies>
 
     <build>
         <plugins>
