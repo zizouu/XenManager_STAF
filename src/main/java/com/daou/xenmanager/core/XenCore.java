@@ -40,7 +40,7 @@ public class XenCore {
     }
 
     public Map<String, String> getVMListByType(int type) throws STAFXenApiException{
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new HashMap<String, String>();
         try{
             Map<VM, VM.Record> recordMap = VM.getAllRecords(connection);
             Set<VM> st = recordMap.keySet();
