@@ -13,36 +13,18 @@
         <java-version>1.8</java-version>
     </properties>
 
+    <repositories>
+        <repository>
+            <id>xen-manager-lib</id>
+            <name>xen-manger-lib</name>
+            <url>file://${project.basedir}/lib</url>
+        </repository>
+    </repositories>
+
     <dependencies>
         <dependency>
-            <groupId>com.xen</groupId>
-            <artifactId>ws-commons-util</artifactId>
-            <scope>system</scope>
-            <systemPath>${basedir}/ext_jar/ws-commons-util-1.0.2.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>com.xen</groupId>
-            <artifactId>xenserver</artifactId>
-            <scope>system</scope>
-            <systemPath>${basedir}/ext_jar/xenserver-7.0.0.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>com.xen</groupId>
-            <artifactId>xmlrpc-client</artifactId>
-            <scope>system</scope>
-            <systemPath>${basedir}/ext_jar/xmlrpc-client-3.1.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>com.xen</groupId>
-            <artifactId>xmlrpc-common</artifactId>
-            <scope>system</scope>
-            <systemPath>${basedir}/ext_jar/xmlrpc-common-3.1.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>com.staf</groupId>
-            <artifactId>jstaf</artifactId>
-            <scope>system</scope>
-            <systemPath>${basedir}/ext_jar/JSTAF.jar</systemPath>
+            <groupId>com.daou</groupId>
+            <artifactId>lib</artifactId>
         </dependency>
     </dependencies>
 
