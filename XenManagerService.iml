@@ -1,20 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module org.jetbrains.idea.maven.project.MavenProjectsManager.isMavenModule="true" type="JAVA_MODULE" version="4">
   <component name="NewModuleRootManager" LANGUAGE_LEVEL="JDK_1_8" inherit-compiler-output="false">
-    <output url="file://$MODULE_DIR$/target/classes" />
+    <output url="file://$MODULE_DIR$/target/staf/STAF-INF/classes" />
     <output-test url="file://$MODULE_DIR$/target/test-classes" />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/${project.build.outputDirectory}/STAF-INF/classes" />
+      <excludeFolder url="file://$MODULE_DIR$/STAF-INF" />
+      <excludeFolder url="file://$MODULE_DIR$/STAF-INF/classes" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: com.daou.lib:ws-commons-util:1.0.0" level="project" />
-    <orderEntry type="library" name="Maven: com.daou.lib:xenserver:1.0.0" level="project" />
-    <orderEntry type="library" name="Maven: com.daou.lib:xmlrpc-client:1.0.0" level="project" />
-    <orderEntry type="library" name="Maven: com.daou.lib:xmlrpc-common:1.0.0" level="project" />
-    <orderEntry type="library" name="Maven: com.daou.lib:staf:1.0.0" level="project" />
+    <orderEntry type="library" name="Maven: com.daou:ws-commons-util:1.0.2" level="project" />
+    <orderEntry type="library" name="Maven: com.daou:xenserver:7.0.0" level="project" />
+    <orderEntry type="library" name="Maven: com.daou:xmlrpc-client:3.1" level="project" />
+    <orderEntry type="library" name="Maven: com.daou:xmlrpc-common:3.1" level="project" />
+    <orderEntry type="library" name="Maven: com.daou:JSTAF:1.0" level="project" />
   </component>
 </module>

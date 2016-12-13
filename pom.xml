@@ -15,33 +15,35 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.daou.lib</groupId>
+            <groupId>com.daou</groupId>
             <artifactId>ws-commons-util</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.2</version>
         </dependency>
         <dependency>
-            <groupId>com.daou.lib</groupId>
+            <groupId>com.daou</groupId>
             <artifactId>xenserver</artifactId>
-            <version>1.0.0</version>
+            <version>7.0.0</version>
         </dependency>
         <dependency>
-            <groupId>com.daou.lib</groupId>
+            <groupId>com.daou</groupId>
             <artifactId>xmlrpc-client</artifactId>
-            <version>1.0.0</version>
+            <version>3.1</version>
         </dependency>
         <dependency>
-            <groupId>com.daou.lib</groupId>
+            <groupId>com.daou</groupId>
             <artifactId>xmlrpc-common</artifactId>
-            <version>1.0.0</version>
+            <version>3.1</version>
         </dependency>
         <dependency>
-            <groupId>com.daou.lib</groupId>
-            <artifactId>staf</artifactId>
-            <version>1.0.0</version>
+            <groupId>com.daou</groupId>
+            <artifactId>JSTAF</artifactId>
+            <version>1.0</version>
         </dependency>
     </dependencies>
 
     <build>
+        <finalName>xen_manager</finalName>
+        <outputDirectory>${project.build.directory}/staf/STAF-INF/classes</outputDirectory>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -60,8 +62,46 @@
                     <archive>
                         <manifestFile>META-INF/MANIFEST.MF</manifestFile>
                     </archive>
-                    <outputDirectory>STAF-INF/classes</outputDirectory>
+                    <outputDirectory>D:\</outputDirectory>
+                    <classesDirectory>${project.build.directory}/staf</classesDirectory>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-dependencies</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>copy-dependencies</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/staf/STAF-INF/jars</outputDirectory>
+                            <overWriteIfNewer>true</overWriteIfNewer>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <configuration>
+                    <!-- 프로젝트 루트에 jar를 만들기 위해 아래의 변수를 설정했다. -->
+                    <outputDirectory>D:\</outputDirectory>
+                    <descriptorRefs>
+                        <descriptorRef>jar-with-dependencies</descriptorRef>
+                    </descriptorRefs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>make-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
