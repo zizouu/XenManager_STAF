@@ -62,7 +62,7 @@
                     <archive>
                         <manifestFile>META-INF/MANIFEST.MF</manifestFile>
                     </archive>
-                    <outputDirectory>D:\</outputDirectory>
+                    <outputDirectory>D:\staf_service</outputDirectory>
                     <classesDirectory>${project.build.directory}/staf</classesDirectory>
                 </configuration>
             </plugin>
