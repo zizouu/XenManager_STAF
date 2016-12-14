@@ -16,8 +16,6 @@ import java.util.*;
 public class XenCore {
     public static final int GET_TYPE_VM = 1000;
     public static final int GET_TYPE_SNAP = 1001;
-    public static final int ADD_TYPE_NAME = 2000;
-    public static final int ADD_TYPE_UUID = 2001;
     private Connection connection;
 
     public void connect(ServerInfo target)throws STAFXenApiException{

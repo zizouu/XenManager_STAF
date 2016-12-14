@@ -20,12 +20,9 @@ public class XenManagerService implements STAFServiceInterfaceLevel30{
     private String fServiceName;
     private STAFHandle fHandle;
     private STAFCommandParser fListParser;
-    private STAFCommandParser fQueryParser;
     private STAFCommandParser fAddParser;
     private STAFCommandParser fDeleteParser;
     private String fLineSep;
-    private TreeMap fPrinterMap = new TreeMap();
-    private TreeMap fModemMap = new TreeMap();
 
     private String xenHost = "vm2.terracetech.co.kr";
     private String xenUser = "root";
@@ -34,15 +31,12 @@ public class XenManagerService implements STAFServiceInterfaceLevel30{
     public XenManagerService() {}
 
     public STAFResult init(InitInfo info){
-        int rc = STAFResult.Ok;
-
         try{
             fServiceName = info.name;
             fHandle = new STAFHandle("STAF/SERVICE/" + info.name);
         }catch (STAFException e){
             return  new STAFResult(STAFResult.STAFRegistrationError, e.toString());
         }
-
         // LIST parser
         fListParser = new STAFCommandParser();
         fListParser.addOption("LIST", 1, STAFCommandParser.VALUEREQUIRED);
@@ -61,8 +55,6 @@ public class XenManagerService implements STAFServiceInterfaceLevel30{
         fDeleteParser.addOption("DELETE", 1, STAFCommandParser.VALUENOTALLOWED);
         fDeleteParser.addOption("VM-NAME", 1, STAFCommandParser.VALUEREQUIRED);
         fDeleteParser.addOption("VM-UUID", 1, STAFCommandParser.VALUEREQUIRED);
-        // Register Help Data
-        registerHelpData(kDeviceInvalidSerialNumber,"Invalid serial number","A non-numeric value was specified for serial number");
 
         return new STAFResult(STAFResult.Ok);
     }
@@ -247,19 +239,14 @@ public class XenManagerService implements STAFServiceInterfaceLevel30{
         return new STAFResult(STAFResult.Ok, resultString);
     }
 
-//************************** SHOULD DEVELOP *******************************//
-
     private STAFResult handleHelp()
     {
         return new STAFResult(STAFResult.Ok,
                 "XenManagerService Service Help" + fLineSep
-                        + fLineSep + "ADD     (PRINTER <printerName> | MODEM <modemName>)" +
-                        " MODEL <model> SN <serial#>"
-                        + fLineSep + "DELETE  PRINTER <printerName> | MODEM <modemName> " +
-                        "CONFIRM"
-                        + fLineSep + "LIST    [VM] [MODEMS]"
-                        + fLineSep + "QUERY   PRINTER <printerName> | MODEM <modemName>"
-                        + fLineSep + "VERSION" + fLineSep + "HELP");
+                        + fLineSep + "ADD VM-NAME <vm-name>" +
+                        " SNAP-NAME <snap-name> SNAP-UUID <snap-uuid>"
+                        + fLineSep + "DELETE  VM-NAME <vm-name> VM-UUID <vm-uuid>"
+                        + fLineSep + "LIST <vm> | <snap-shot>");
     }
 
     private STAFResult handleVersion()
@@ -267,94 +254,10 @@ public class XenManagerService implements STAFServiceInterfaceLevel30{
         return new STAFResult(STAFResult.Ok, kVersion);
     }
 
-    private STAFResult handleQuery(RequestInfo info)
-    {
-        // Check whether Trust level is sufficient for this command.
-        if (info.trustLevel < 2)
-        {
-            return new STAFResult(STAFResult.AccessDenied,
-                    "Trust level 2 required for QUERY request. Requesting " +
-                            "machine's trust level: " +  info.trustLevel);
-        }
-
-        STAFResult result = new STAFResult(STAFResult.Ok, "");
-        String resultString = "";
-        STAFResult resolveResult = new STAFResult();
-        STAFCommandParseResult parsedRequest = fQueryParser.parse(info.request);
-        String printerValue;
-        String modemValue;
-
-        if (parsedRequest.rc != STAFResult.Ok)
-        {
-            return new STAFResult(STAFResult.InvalidRequestString,
-                    parsedRequest.errorBuffer);
-        }
-
-
-        resolveResult = resolveVar(info.machine,
-                parsedRequest.optionValue("printer"),
-                info.handle);
-
-        if (resolveResult.rc != STAFResult.Ok)
-        {
-            return resolveResult;
-        }
-
-        printerValue = resolveResult.result;
-
-        resolveResult = resolveVar(info.machine,
-                parsedRequest.optionValue("modem"),
-                info.handle);
-
-        if (resolveResult.rc != STAFResult.Ok)
-        {
-            return resolveResult;
-        }
-
-        modemValue = resolveResult.result;
-
-        if (!printerValue.equals(""))
-        {
-            if (fPrinterMap.containsKey(printerValue))
-            {
-                String printer = printerValue;
-                DeviceData data = (DeviceData)fPrinterMap.get(printer);
-                resultString = "Printer : " + printer + "\n";
-                resultString += "Model   : " + data.model + "\n";
-                resultString += "Serial# : " + data.sn + "\n";
-            }
-            else
-            {
-                return new STAFResult(STAFResult.DoesNotExist, printerValue);
-            }
-        }
-        else if (!modemValue.equals(""))
-        {
-            if (fModemMap.containsKey(modemValue))
-            {
-                String modem = modemValue;
-                DeviceData data = (DeviceData)fModemMap.get(modem);
-                resultString = "Modem   : " + modem + "\n";
-                resultString += "Model   : " + data.model + "\n";
-                resultString += "Serial# : " + data.sn + "\n";
-            }
-            else
-            {
-                return new STAFResult(STAFResult.DoesNotExist, printerValue);
-            }
-        }
-
-        return new STAFResult(STAFResult.Ok, resultString);
-    }
-
     public STAFResult term()
     {
         try
         {
-            // Un-register Help Data
-
-            unregisterHelpData(kDeviceInvalidSerialNumber);
-
             // Un-register the service handle
 
             fHandle.unRegister();
@@ -363,7 +266,6 @@ public class XenManagerService implements STAFServiceInterfaceLevel30{
         {
             return new STAFResult(STAFResult.STAFRegistrationError, ex.toString());
         }
-
         return new STAFResult(STAFResult.Ok);
     }
 
@@ -394,39 +296,5 @@ public class XenManagerService implements STAFServiceInterfaceLevel30{
         }
 
         return new STAFResult(STAFResult.Ok, value);
-    }
-
-
-    // Register error codes for the STAX Service with the HELP service
-
-    private void registerHelpData(int errorNumber, String info,
-                                  String description)
-    {
-        STAFResult res = fHandle.submit2("local", "HELP",
-                "REGISTER SERVICE " + fServiceName +
-                        " ERROR " + errorNumber +
-                        " INFO " + STAFUtil.wrapData(info) +
-                        " DESCRIPTION " + STAFUtil.wrapData(description));
-    }
-
-    // Un-register error codes for the STAX Service with the HELP service
-
-    private void unregisterHelpData(int errorNumber)
-    {
-        STAFResult res = fHandle.submit2("local", "HELP",
-                "UNREGISTER SERVICE " + fServiceName +
-                        " ERROR " + errorNumber);
-    }
-
-    public class DeviceData
-    {
-        public String model = "";
-        public String sn = "";
-
-        public DeviceData(String model, String sn)
-        {
-            this.model = model;
-            this.sn = sn;
-        }
     }
 }
