@@ -1,10 +1,9 @@
-package com.daou.xenmanager.core;
+package com.daou.xenmanager.service.impl;
 
 import com.daou.xenmanager.entity.ServerInfo;
 import com.daou.xenmanager.exception.STAFXenApiException;
-import com.ibm.staf.STAFException;
+import com.daou.xenmanager.service.XenService;
 import com.xensource.xenapi.*;
-import org.apache.xmlrpc.XmlRpcException;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -13,11 +12,12 @@ import java.util.*;
 /**
  * Created by user on 2016-12-07.
  */
-public class XenCore {
+public class XenServiceImpl implements XenService{
     public static final int GET_TYPE_VM = 1000;
     public static final int GET_TYPE_SNAP = 1001;
     private Connection connection;
 
+    @Override
     public void connect(ServerInfo target)throws STAFXenApiException{
         try{
             connection = new Connection(new URL("http://" + target.hostName));
@@ -29,6 +29,7 @@ public class XenCore {
         }
     }
 
+    @Override
     public void disconnect() throws STAFXenApiException{
         try{
             Session.logout(connection);
@@ -37,16 +38,17 @@ public class XenCore {
         }
     }
 
+    @Override
     public Map<String, String> getVMListByType(int type) throws STAFXenApiException{
         Map<String, String> map = new HashMap<String, String>();
         try{
             Map<VM, VM.Record> recordMap = VM.getAllRecords(connection);
             Set<VM> st = recordMap.keySet();
             for (VM vm : st){
-                boolean isSnapshot = vm.getIsASnapshot(connection);
-                boolean isTemplate = vm.getIsATemplate(connection);
-                boolean isControlDomain = vm.getIsControlDomain(connection);
                 VM.Record record = recordMap.get(vm);
+                boolean isSnapshot = record.isASnapshot;
+                boolean isTemplate = record.isATemplate;
+                boolean isControlDomain = record.isControlDomain;
                 if(type == GET_TYPE_SNAP && isSnapshot){
                     map.put(record.uuid, record.nameLabel);
                 }else if(type == GET_TYPE_VM && !isTemplate && !isControlDomain){
@@ -59,6 +61,7 @@ public class XenCore {
         return map;
     }
 
+    @Override
     public VM.Record createVMBySnapshot(String snapName, String snapUuid, String vmName) throws STAFXenApiException {
         VM.Record vmRecord = null;
         try {
@@ -85,6 +88,7 @@ public class XenCore {
         return vmRecord;
     }
 
+    @Override
     public String removeVMByName(String vmName, String vmUuid) throws STAFXenApiException{
         String result = null;
         try{
