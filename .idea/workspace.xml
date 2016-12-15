@@ -7,15 +7,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d3fca6cd-39f0-4367-bbce-68bb16761311" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/com/daou/xenmanager/service/XenService.java" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/test/java/XenManagerCoreTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/META-INF/MANIFEST.MF" afterPath="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/XenManagerService.iml" afterPath="$PROJECT_DIR$/XenManagerService.iml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/pom.xml" afterPath="$PROJECT_DIR$/pom.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/com/daou/xenmanager/XenManagerService.java" afterPath="$PROJECT_DIR$/src/main/java/com/daou/xenmanager/XenManagerCore.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/src/main/java/com/daou/xenmanager/core/XenCore.java" afterPath="$PROJECT_DIR$/src/main/java/com/daou/xenmanager/service/impl/XenServiceImpl.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -37,11 +30,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="false">
+      <file leaf-file-name="pom.xml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="131">
-              <caret line="57" column="21" lean-forward="false" selection-start-line="57" selection-start-column="21" selection-end-line="57" selection-end-column="21" />
+            <state relative-caret-position="30">
+              <caret line="133" column="18" lean-forward="true" selection-start-line="133" selection-start-column="18" selection-end-line="133" selection-end-column="18" />
               <folding />
             </state>
           </provider>
@@ -59,11 +52,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="XenManagerCoreTest.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="XenManagerCoreTest.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/java/XenManagerCoreTest.java">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="228">
-              <caret line="12" column="3" lean-forward="true" selection-start-line="12" selection-start-column="3" selection-end-line="12" selection-end-column="3" />
+              <caret line="12" column="3" lean-forward="false" selection-start-line="12" selection-start-column="3" selection-end-line="12" selection-end-column="3" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -75,7 +68,7 @@
         <entry file="jar://$MAVEN_REPOSITORY$/com/daou/xenserver/7.0.0/xenserver-7.0.0.jar!/com/xensource/xenapi/VM.class">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="190">
-              <caret line="2261" column="5" lean-forward="true" selection-start-line="2261" selection-start-column="5" selection-end-line="2261" selection-end-column="5" />
+              <caret line="2261" column="5" lean-forward="false" selection-start-line="2261" selection-start-column="5" selection-end-line="2261" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -172,11 +165,11 @@
         <option value="$PROJECT_DIR$/src/main/java/com/daou/xenmanager/service/XenServiceImpl.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/daou/xenmanager/service/XenService.java" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/test/java/XenServiceImplTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/daou/xenmanager/service/impl/XenServiceImpl.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/daou/xenmanager/XenManagerCore.java" />
         <option value="$PROJECT_DIR$/src/test/java/XenManagerCoreTest.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
       </list>
     </option>
   </component>
@@ -211,6 +204,20 @@
         <PATH_ELEMENT>
           <option name="myItemId" value="Run Configurations" />
           <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RunConfigurationsNode" />
+        </PATH_ELEMENT>
+      </PATH>
+      <PATH>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$RootNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="XenManagerService" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$ProjectNode" />
+        </PATH_ELEMENT>
+        <PATH_ELEMENT>
+          <option name="myItemId" value="Plugins" />
+          <option name="myItemType" value="org.jetbrains.idea.maven.navigator.MavenProjectsStructure$PluginsNode" />
         </PATH_ELEMENT>
       </PATH>
       <PATH>
@@ -261,6 +268,38 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="XenManagerService" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="XenManagerService" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="XenManagerService" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="target" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="XenManagerService" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="XenManagerService" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="target" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="site" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -750,7 +789,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -759,14 +798,14 @@
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
-      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2602118" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2602118" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.39116204" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Properties" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24281392" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24281392" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3371522" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1108,14 +1147,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="131">
-          <caret line="57" column="21" lean-forward="false" selection-start-line="57" selection-start-column="21" selection-end-line="57" selection-end-column="21" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/.gitignore">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="451">
@@ -1156,7 +1187,7 @@
     <entry file="jar://$MAVEN_REPOSITORY$/com/daou/xenserver/7.0.0/xenserver-7.0.0.jar!/com/xensource/xenapi/VM.class">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="190">
-          <caret line="2261" column="5" lean-forward="true" selection-start-line="2261" selection-start-column="5" selection-end-line="2261" selection-end-column="5" />
+          <caret line="2261" column="5" lean-forward="false" selection-start-line="2261" selection-start-column="5" selection-end-line="2261" selection-end-column="5" />
           <folding />
         </state>
       </provider>
@@ -1192,10 +1223,18 @@
     <entry file="file://$PROJECT_DIR$/src/test/java/XenManagerCoreTest.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="228">
-          <caret line="12" column="3" lean-forward="true" selection-start-line="12" selection-start-column="3" selection-end-line="12" selection-end-column="3" />
+          <caret line="12" column="3" lean-forward="false" selection-start-line="12" selection-start-column="3" selection-end-line="12" selection-end-column="3" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="30">
+          <caret line="133" column="18" lean-forward="true" selection-start-line="133" selection-start-column="18" selection-end-line="133" selection-end-column="18" />
+          <folding />
         </state>
       </provider>
     </entry>
