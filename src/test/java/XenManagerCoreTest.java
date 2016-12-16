@@ -32,14 +32,12 @@ public class XenManagerCoreTest {
 
     @Test
     public void aInitTest() throws Exception{
-        System.out.println("init");
         STAFResult result = xenCore.init(initInfo);
         Assert.assertEquals(result.rc, STAFResult.Ok);
     }
 
     @Test
     public void bAcceptRequestTest() throws Exception{
-        System.out.println("accept");
         requestInfo.request = "LIST vm";
         xenCore.init(initInfo);
         STAFResult result = xenCore.acceptRequest(requestInfo);
@@ -48,7 +46,6 @@ public class XenManagerCoreTest {
 
     @Test
     public void cHandleListTest(){
-        System.out.println("list");
         requestInfo.request = "LIST vm";
         xenCore.init(initInfo);
         STAFResult result = xenCore.handleList(requestInfo);
@@ -71,7 +68,6 @@ public class XenManagerCoreTest {
     @Ignore
     @Test
     public void eHandleDeleteTest() throws Exception{
-        System.out.println("delete");
         XenServiceImpl service = Mockito.mock(XenServiceImpl.class);
         requestInfo.request = "delete vm-name " + vmName + " vm-uuid ";
         xenCore.init(initInfo);

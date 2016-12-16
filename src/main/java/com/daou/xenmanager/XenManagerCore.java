@@ -69,9 +69,9 @@ public class XenManagerCore implements STAFServiceInterfaceLevel30{
         }else if(request.equals("delete")){
             result = handleDelete(info);
         }else{
+            //invalid request
             result = new STAFResult(STAFResult.InvalidRequestString,"Unknown XenManagerCore Request: " + lowerRequest);
         }
-
         return result;
     }
 
@@ -80,32 +80,28 @@ public class XenManagerCore implements STAFServiceInterfaceLevel30{
         if (info.trustLevel < 2){
             return new STAFResult(STAFResult.AccessDenied,"Trust level 2 required for LIST request. Requesting machine's trust level: "+info.trustLevel);
         }
-        //About xen
+        //About xen var
         XenServiceImpl xenManager = new XenServiceImpl();
-        List<VM.Record> list;
-        //About STAF
-        STAFResult resolveResult, result;
-        STAFCommandParseResult parsedRequest = fListParser.parse(info.request);
+        //About STAF var
+        STAFResult resolveResult;
         String resultString = "";
         String listValue = "";
-
+        //verify valid request
+        STAFCommandParseResult parsedRequest = fListParser.parse(info.request);
         if (parsedRequest.rc != STAFResult.Ok){
             return new STAFResult(STAFResult.InvalidRequestString, parsedRequest.errorBuffer);
         }
-
+        //verify list type
         resolveResult = resolveVar(info.machine, parsedRequest.optionValue("list"), info.handle);
-
         if (resolveResult.rc != STAFResult.Ok){
             return resolveResult;
         }
-
         listValue = resolveResult.result;
-
+        //xen api logic
         try{
             Map<String, String> xenResultMap;
 
             xenManager.connect(new ServerInfo(xenHost, xenUser, xenPassword));
-            System.out.println(listValue);
             if("vm".equals(listValue)){
                 //request vm
                 xenResultMap = xenManager.getVMListByType(XenServiceImpl.GET_TYPE_VM);
@@ -134,7 +130,6 @@ public class XenManagerCore implements STAFServiceInterfaceLevel30{
         }catch (STAFXenApiException e){
             return new STAFResult(STAFResult.UserDefined, e.toString());
         }
-
         return new STAFResult(STAFResult.Ok, resultString);
     }
 
@@ -143,22 +138,15 @@ public class XenManagerCore implements STAFServiceInterfaceLevel30{
         if (info.trustLevel < 3){
             return new STAFResult(STAFResult.AccessDenied,"Trust level 3 required for ADD request. Requesting machine's trust level: " +  info.trustLevel);
         }
-
+        // About STAF var
         STAFResult resolveResult;
         String resultString, vmName, snapName, snapUuid;
-        if(fAddParser == null){
-            System.out.println("fAddParser null");
-        }
-        if(info == null){
-            System.out.println("info null");
-        }
         STAFCommandParseResult parsedRequest = fAddParser.parse(info.request);
-
+        //check validate request
         if (parsedRequest.rc != STAFResult.Ok){
             return new STAFResult(STAFResult.InvalidRequestString,
                     parsedRequest.errorBuffer);
         }
-
         //check validation vm-name
         resolveResult = resolveVar(info.machine, parsedRequest.optionValue("vm-name"), info.handle);
         if (resolveResult.rc != STAFResult.Ok){
@@ -183,12 +171,6 @@ public class XenManagerCore implements STAFServiceInterfaceLevel30{
             xenManager.connect(new ServerInfo(xenHost, xenUser, xenPassword));
             //find snap-shot logic
             VM.Record record = xenManager.createVMBySnapshot(snapName, snapUuid, vmName);
-            if(record == null){
-                System.out.println("nullll");
-            }else{
-                System.out.println("not nullll");
-            }
-
             //if snap-shot is not exist
             if(record == null){
                 return new STAFResult(STAFResult.InvalidRequestString, "CHECK YOUR SNAP-SHOT NAME OR UUID");
@@ -211,51 +193,45 @@ public class XenManagerCore implements STAFServiceInterfaceLevel30{
                     "Trust level 4 required for DELETE request. Requesting " +
                             "machine's trust level: " +  info.trustLevel);
         }
-
+        //About STAF var
         String resultString = "";
         String vmName, vmUuid;
         STAFResult resolveResult;
+        //check validation of request
         STAFCommandParseResult parsedRequest = fDeleteParser.parse(info.request);
-
         if (parsedRequest.rc != STAFResult.Ok){
             return new STAFResult(STAFResult.InvalidRequestString, parsedRequest.errorBuffer);
         }
-        //check validation vm-name
+        //check validation of vm-name
         resolveResult = resolveVar(info.machine, parsedRequest.optionValue("vm-name"), info.handle);
         if (resolveResult.rc != STAFResult.Ok){
             return resolveResult;
         }
         vmName = resolveResult.result;
-        //check validation vm-uuid
+        //check validation of vm-uuid
         resolveResult = resolveVar(info.machine, parsedRequest.optionValue("vm-uuid"), info.handle);
         if (resolveResult.rc != STAFResult.Ok){
             return resolveResult;
         }
         vmUuid = resolveResult.result;
-
+        //xen api logic
         XenServiceImpl xenManager = new XenServiceImpl();
         try{
-            System.out.println("delete try");
             xenManager.connect(new ServerInfo(xenHost, xenUser, xenPassword));
-            System.out.println("dletett connect");
+            //check is exist vm
             String name = xenManager.removeVMByName(vmName, vmUuid);
-            System.out.println("dletett removebyname");
             if(name == null){
-                System.out.println("name is nullllllll");
                 return new STAFResult(STAFResult.InvalidRequestString, "CHECK YOUR VM NAME OR UUID");
             }else{
                 resultString = "SUCCESS DELETE VM named of " + name + "";
             }
         }catch (STAFXenApiException e){
-            System.out.println(e.toString());
             return new STAFResult(STAFResult.UserDefined, e.toString());
         }
-
         return new STAFResult(STAFResult.Ok, resultString);
     }
 
-    public STAFResult handleHelp()
-    {
+    public STAFResult handleHelp(){
         return new STAFResult(STAFResult.Ok,
                 "XenManagerCore Service Help" + fLineSep
                         + fLineSep + "ADD VM-NAME <vm-name>" +
@@ -269,16 +245,12 @@ public class XenManagerCore implements STAFServiceInterfaceLevel30{
         return new STAFResult(STAFResult.Ok, kVersion);
     }
 
-    public STAFResult term()
-    {
-        try
-        {
+    public STAFResult term(){
+        try{
             // Un-register the service handle
 
             fHandle.unRegister();
-        }
-        catch (STAFException ex)
-        {
+        }catch (STAFException ex){
             return new STAFResult(STAFResult.STAFRegistrationError, ex.toString());
         }
         return new STAFResult(STAFResult.Ok);
@@ -287,8 +259,7 @@ public class XenManagerCore implements STAFServiceInterfaceLevel30{
     // this method will resolve any STAF variables that
     // are contained within the Option Value
     public STAFResult resolveVar(String machine, String optionValue,
-                                  int handle)
-    {
+                                  int handle){
         String value = "";
         STAFResult resolvedResult = null;
 

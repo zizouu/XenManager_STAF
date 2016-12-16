@@ -28,7 +28,6 @@ public class XenServiceImpl implements XenService{
             throw new STAFXenApiException("CONNECTION", e.toString());
         }
     }
-
     @Override
     public void disconnect() throws STAFXenApiException{
         try{
@@ -37,7 +36,6 @@ public class XenServiceImpl implements XenService{
             throw new STAFXenApiException("LOGOUT", e.getMessage());
         }
     }
-
     @Override
     public Map<String, String> getVMListByType(int type) throws STAFXenApiException{
         Map<String, String> map = new HashMap<String, String>();
@@ -49,6 +47,7 @@ public class XenServiceImpl implements XenService{
                 boolean isSnapshot = record.isASnapshot;
                 boolean isTemplate = record.isATemplate;
                 boolean isControlDomain = record.isControlDomain;
+                //check snap-shot or vm from all records
                 if(type == GET_TYPE_SNAP && isSnapshot){
                     map.put(record.uuid, record.nameLabel);
                 }else if(type == GET_TYPE_VM && !isTemplate && !isControlDomain){
@@ -60,7 +59,6 @@ public class XenServiceImpl implements XenService{
         }
         return map;
     }
-
     @Override
     public VM.Record createVMBySnapshot(String snapName, String snapUuid, String vmName) throws STAFXenApiException {
         VM.Record vmRecord = null;
@@ -68,26 +66,26 @@ public class XenServiceImpl implements XenService{
             VM targetVM;
             VM.Record snapRecord;
             //find snap-shot by name
-                Set<VM> vmSet = VM.getByNameLabel(connection, snapName);
-                if (vmSet.size() != 0) {
-                    for (VM vm : vmSet) {
-                        snapRecord = vm.getRecord(connection);
-                        if(snapRecord.isASnapshot && snapUuid.equals(snapRecord.uuid)){
-                            snapRecord.nameLabel = vmName;
-                            snapRecord.isControlDomain = false;
-                            snapRecord.isATemplate = false;
-                            targetVM = VM.create(connection, snapRecord);
-                            vmRecord = targetVM.getRecord(connection);
-                            break;
-                        }
+            Set<VM> vmSet = VM.getByNameLabel(connection, snapName);
+            if (vmSet.size() != 0) {
+                for (VM vm : vmSet) {
+                    snapRecord = vm.getRecord(connection);
+                    //verify is snap-shot && uuid check
+                    if(snapRecord.isASnapshot && snapUuid.equals(snapRecord.uuid)){
+                        snapRecord.nameLabel = vmName;
+                        snapRecord.isControlDomain = false;
+                        snapRecord.isATemplate = false;
+                        targetVM = VM.create(connection, snapRecord);
+                        vmRecord = targetVM.getRecord(connection);
+                        break;
                     }
                 }
+            }
         } catch (Exception e) {
             throw new STAFXenApiException("CREATE VM", e.toString());
         }
         return vmRecord;
     }
-
     @Override
     public String removeVMByName(String vmName, String vmUuid) throws STAFXenApiException{
         String result = null;
