@@ -2,11 +2,16 @@ import com.daou.xenmanager.XenManagerCore;
 import com.daou.xenmanager.service.XenService;
 import com.daou.xenmanager.service.impl.XenServiceImpl;
 import com.ibm.staf.STAFResult;
+import com.xensource.xenapi.Connection;
 import com.xensource.xenapi.VM;
 import org.junit.*;
 import org.junit.runners.MethodSorters;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+
+import java.net.URL;
 
 /**
  * Created by user on 2016-12-15.
@@ -52,8 +57,10 @@ public class XenManagerCoreTest {
         Assert.assertEquals(result.rc, STAFResult.Ok);
     }
 
+
     @Test
     public void dHandleAddTest() throws Exception{
+
         XenServiceImpl service = Mockito.mock(XenServiceImpl.class);
         VM.Record record = new VM.Record();
         record.nameLabel = "tst";
@@ -66,8 +73,11 @@ public class XenManagerCoreTest {
     }
 
     @Ignore
+    @PrepareForTest(VM.class)
     @Test
     public void eHandleDeleteTest() throws Exception{
+        /*PowerMockito.mockStatic(VM.class);
+        PowerMockito.when(VM.getAllRecords()).thenReturn();*/
         XenServiceImpl service = Mockito.mock(XenServiceImpl.class);
         requestInfo.request = "delete vm-name " + vmName + " vm-uuid ";
         xenCore.init(initInfo);
