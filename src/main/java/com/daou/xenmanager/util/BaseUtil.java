@@ -7,7 +7,6 @@ public class BaseUtil {
     public static void printLog(String s){
         System.out.println(s);
     }
-
     public static void printLog(int i){
         System.out.println(i);
     }

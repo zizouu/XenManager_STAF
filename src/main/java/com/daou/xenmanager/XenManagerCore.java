@@ -1,5 +1,6 @@
 package com.daou.xenmanager;
 
+import com.daou.xenmanager.service.XenService;
 import com.daou.xenmanager.service.impl.XenServiceImpl;
 import com.daou.xenmanager.entity.ServerInfo;
 import com.daou.xenmanager.exception.STAFXenApiException;
@@ -16,6 +17,7 @@ import java.util.*;
  */
 public class XenManagerCore implements STAFServiceInterfaceLevel30{
     private final String kVersion = "1.0.0";
+    private XenService xenManager;
     private STAFHandle fHandle;
     private STAFCommandParser fListParser;
     private STAFCommandParser fAddParser;
@@ -28,11 +30,19 @@ public class XenManagerCore implements STAFServiceInterfaceLevel30{
 
     public XenManagerCore() {}
 
+    public void setXenService(XenService service){
+        this.xenManager = service;
+    }
+
     public STAFResult init(InitInfo info){
         try{
             fHandle = new STAFHandle("STAF/SERVICE/" + info.name);
         }catch (STAFException e){
             return  new STAFResult(STAFResult.STAFRegistrationError, e.toString());
+        }
+        // Init xenService
+        if(xenManager == null){
+            xenManager = new XenServiceImpl();
         }
         // LIST parser
         fListParser = new STAFCommandParser();
@@ -81,7 +91,6 @@ public class XenManagerCore implements STAFServiceInterfaceLevel30{
             return new STAFResult(STAFResult.AccessDenied,"Trust level 2 required for LIST request. Requesting machine's trust level: "+info.trustLevel);
         }
         //About xen var
-        XenServiceImpl xenManager = new XenServiceImpl();
         //About STAF var
         STAFResult resolveResult;
         String resultString = "";
@@ -100,7 +109,6 @@ public class XenManagerCore implements STAFServiceInterfaceLevel30{
         //xen api logic
         try{
             Map<String, String> xenResultMap;
-
             xenManager.connect(new ServerInfo(xenHost, xenUser, xenPassword));
             if("vm".equals(listValue)){
                 //request vm
@@ -130,7 +138,7 @@ public class XenManagerCore implements STAFServiceInterfaceLevel30{
         }catch (STAFXenApiException e){
             return new STAFResult(STAFResult.UserDefined, e.toString());
         }
-        return new STAFResult(STAFResult.Ok, resultString);
+        return new STAFResult(STAFResult.Ok, resultString, true);
     }
 
     public STAFResult handleAdd(RequestInfo info){
@@ -166,7 +174,6 @@ public class XenManagerCore implements STAFServiceInterfaceLevel30{
         }
         snapUuid = resolveResult.result;
         //xen logic
-        XenServiceImpl xenManager = new XenServiceImpl();
         try{
             xenManager.connect(new ServerInfo(xenHost, xenUser, xenPassword));
             //find snap-shot logic
@@ -187,7 +194,6 @@ public class XenManagerCore implements STAFServiceInterfaceLevel30{
 
     public STAFResult handleDelete(RequestInfo info){
         // Check whether Trust level is sufficient for this command.
-        System.out.println("delete init");
         if (info.trustLevel < 4){
             return new STAFResult(STAFResult.AccessDenied,
                     "Trust level 4 required for DELETE request. Requesting " +
@@ -215,7 +221,6 @@ public class XenManagerCore implements STAFServiceInterfaceLevel30{
         }
         vmUuid = resolveResult.result;
         //xen api logic
-        XenServiceImpl xenManager = new XenServiceImpl();
         try{
             xenManager.connect(new ServerInfo(xenHost, xenUser, xenPassword));
             //check is exist vm
