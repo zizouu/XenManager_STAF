@@ -32,28 +32,39 @@ import java.util.Set;
 @PrepareForTest({VM.class})
 public class XenServiceImplTest {
     private XenService service;
-
     @Before
     public void initTest(){
         service = new XenServiceImpl();
+        //make powermock object for static method
+        PowerMockito.mockStatic(VM.class);
     }
-
     @Test
     public void getVMListTest() throws Exception{
+        //prepare for necessary data
         Map<VM, VM.Record> recordMap = new HashMap<>();
         VM vm1 = PowerMockito.mock(VM.class);
         VM.Record record1 = PowerMockito.mock(VM.Record.class);
-        recordMap.put(vm1, record1);;
+        recordMap.put(vm1, record1);
         record1.isASnapshot = false;
         record1.isATemplate = false;
         record1.isControlDomain = false;
         record1.uuid = RandomStringUtils.randomAlphanumeric(15);
         record1.nameLabel = RandomStringUtils.randomAlphanumeric(10);
-        PowerMockito.mockStatic(VM.class);
+        //case of return normal
         Mockito.when(VM.getAllRecords(Matchers.any(Connection.class))).thenReturn(recordMap);
-        service.getVMListByType(XenServiceImpl.GET_TYPE_VM);
+        Map<String, String> result = service.getVMListByType(XenServiceImpl.GET_TYPE_VM);
         PowerMockito.verifyStatic();
         VM.getAllRecords(Matchers.any(Connection.class));
+        Assert.assertEquals(1, result.size());
+    }
+    @Ignore
+    @Test
+    public void createVMBySnapshotTest(){
+
+    }
+    @Ignore
+    @Test
+    public void removeVMByNameTest(){
 
     }
 }
