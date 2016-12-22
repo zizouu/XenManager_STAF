@@ -20,7 +20,6 @@ import java.util.Map;
 /**
  * Created by user on 2016-12-15.
  */
-@Ignore
 public class XenManagerCoreTest {
     private XenManagerCore xenCore;
     private XenManagerCore.RequestInfo requestInfo;
